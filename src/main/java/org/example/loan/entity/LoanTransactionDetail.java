@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.loan.entity.Enum.LoanStatus;
 
 @Data
 @AllArgsConstructor
@@ -32,4 +33,6 @@ public class LoanTransactionDetail {
     private Long updatedAt;
 
 }
+
+
 

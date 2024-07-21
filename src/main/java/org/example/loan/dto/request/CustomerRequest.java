@@ -15,6 +15,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @Builder
 public class CustomerRequest {
+    private String id;
     private String firstName;
     private String lastName;
     private Date dateOfBirth;

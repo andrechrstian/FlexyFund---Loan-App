@@ -39,6 +39,22 @@ public class AuthController {
                 .body(commonResponse);
     }
 
+    @PostMapping("/register/staff")
+    public ResponseEntity<CommonResponse<RegisterResponse>> registerStaff(@RequestBody CustomerRequest.AuthRequest<CustomerRequest> request) {
+
+        RegisterResponse response = authService.registerStaff(request);
+
+        CommonResponse<RegisterResponse> commonResponse = CommonResponse.<RegisterResponse>builder()
+                .statusCode(HttpStatus.CREATED.value())
+                .message("Succesfully register new Staff")
+                .data(Optional.of(response))
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(commonResponse);
+    }
+
     @PostMapping("/register/admin")
     public ResponseEntity<CommonResponse<RegisterResponse>> registerAdmin(@RequestBody CustomerRequest.AuthRequest<CustomerRequest> request) {
 

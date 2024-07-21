@@ -6,7 +6,7 @@ import org.example.loan.dto.request.CustomerRequest;
 import org.example.loan.dto.response.LoginResponse;
 import org.example.loan.dto.response.RegisterResponse;
 import org.example.loan.entity.AppUser;
-import org.example.loan.entity.ERole;
+import org.example.loan.entity.Enum.ERole;
 import org.example.loan.entity.Role;
 import org.example.loan.entity.User;
 import org.example.loan.repository.UserRepository;
@@ -40,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public RegisterResponse registerAdmin(CustomerRequest.AuthRequest<CustomerRequest> authRequest) {
-        Role role = roleService.getOrsave(ERole.ROLE_ADMIN);
+        Role role = roleService.getOrSave(ERole.ROLE_ADMIN);
         List<Role> roles = new ArrayList<>();
         roles.add(role);
 
@@ -58,6 +58,8 @@ public class AuthServiceImpl implements AuthService {
 
         requestData.setUser(user);
 
+        customerService.createCustomer(requestData);
+
         return RegisterResponse.builder()
                 .email(user.getEmail())
                 .role(role.getRole())
@@ -67,7 +69,35 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public RegisterResponse registerCustomer(CustomerRequest.AuthRequest<CustomerRequest> request) {
-        Role role = roleService.getOrsave(ERole.ROLE_CUSTOMER);
+        Role role = roleService.getOrSave(ERole.ROLE_CUSTOMER);
+        List<Role> roles = new ArrayList<>();
+        roles.add(role);
+
+        User user = User.builder()
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .roles(roles)
+                .build();
+
+        user = userRepository.save(user);
+
+        CustomerRequest requestData = request.getData().orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer Not Found")
+        );
+
+        requestData.setUser(user); //set relation customer to user
+
+        customerService.createCustomer(requestData);
+
+        return RegisterResponse.builder()
+                .email(user.getEmail())
+                .role(role.getRole())
+                .build();
+    }
+
+    @Override
+    public RegisterResponse registerStaff(CustomerRequest.AuthRequest<CustomerRequest> request) {
+        Role role = roleService.getOrSave(ERole.ROLE_STAFF);
         List<Role> roles = new ArrayList<>();
         roles.add(role);
 

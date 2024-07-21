@@ -8,6 +8,7 @@ import org.example.loan.dto.response.RegisterResponse;
 public interface AuthService {
     RegisterResponse registerCustomer (CustomerRequest.AuthRequest<CustomerRequest> authRequest);
     RegisterResponse registerAdmin (CustomerRequest.AuthRequest<CustomerRequest> authRequest);
+    RegisterResponse registerStaff (CustomerRequest.AuthRequest<CustomerRequest> authRequest);
     LoginResponse login (CustomerRequest.AuthRequest<String> request);
 
   }

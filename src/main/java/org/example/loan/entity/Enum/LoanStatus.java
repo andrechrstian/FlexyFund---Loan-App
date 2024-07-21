@@ -1,4 +1,4 @@
-package org.example.loan.entity;
+package org.example.loan.entity.Enum;
 
 public enum LoanStatus {
     PAID,

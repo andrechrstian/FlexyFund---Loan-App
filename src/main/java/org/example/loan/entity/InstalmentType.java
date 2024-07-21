@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.loan.entity.Enum.EInstalmentType;
 
 @Data
 @AllArgsConstructor
@@ -20,11 +21,7 @@ public class InstalmentType {
     @Enumerated(EnumType.STRING)
     private EInstalmentType instalmentType;
 
-    enum EInstalmentType {
-        ONE_MONTH,
-        THREE_MONTHS,
-        SIXTH_MONTHS,
-        NINE_MONTHS,
-        TWELVE_MONTHS
+    public InstalmentType(String id) {
+        this.id = id;
     }
 }

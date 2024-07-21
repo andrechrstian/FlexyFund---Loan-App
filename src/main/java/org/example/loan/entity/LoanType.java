@@ -21,4 +21,8 @@ public class LoanType {
     private String type;
     @Column(name = "maximum_loan")
     private Double maxLoan;
+
+    public LoanType(String id){
+        this.id = id;
+    }
 }

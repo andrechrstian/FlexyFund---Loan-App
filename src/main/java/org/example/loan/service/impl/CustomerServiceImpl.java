@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import org.example.loan.dto.request.CustomerRequest;
 import org.example.loan.dto.response.CustomerResponse;
 import org.example.loan.entity.Customer;
-import org.example.loan.entity.User;
 import org.example.loan.repository.CustomerRepository;
-import org.example.loan.repository.UserRepository;
 import org.example.loan.service.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,17 +16,10 @@ import java.util.List;
 @AllArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
-    private CustomerRepository customerRepository;
-    private UserRepository userRepository;
+    private final CustomerRepository customerRepository;
 
     @Override
     public CustomerResponse createCustomer(CustomerRequest request) {
-        User user = User.builder()
-                .email(request.getUser().getEmail())
-                .password(request.getUser().getPassword())
-                .build();
-
-        user = userRepository.save(user);
 
         Customer customer = customerRepository.save(
                 Customer.builder()
@@ -37,7 +28,7 @@ public class CustomerServiceImpl implements CustomerService {
                         .phone(request.getPhone())
                         .status(request.getStatus())
                         .dateOfBirth(request.getDateOfBirth())
-                        .user(user)
+                        .user(request.getUser())
                         .build()
         );
         return convertToCustomerResponse(customer);
@@ -58,17 +49,16 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponse updateCustomer(CustomerRequest request) {
-        findByIdOrThrowNotFound(request.getUser().getEmail());
-        Customer customer = customerRepository.saveAndFlush(
-                Customer.builder()
-                        .firstName(request.getFirstName())
-                        .lastName(request.getLastName())
-                        .phone(request.getPhone())
-                        .status(request.getStatus())
-                        .dateOfBirth(request.getDateOfBirth())
-                        .build()
-        );
-        return convertToCustomerResponse(customer);
+        Customer existingCustomer = findByIdOrThrowNotFound(request.getId());
+        existingCustomer.setFirstName(request.getFirstName());
+        existingCustomer.setLastName(request.getLastName());
+        existingCustomer.setPhone(request.getPhone());
+        existingCustomer.setStatus(request.getStatus());
+        existingCustomer.setDateOfBirth(request.getDateOfBirth());
+
+        Customer updatedCustomer = customerRepository.saveAndFlush(existingCustomer);
+
+        return convertToCustomerResponse(updatedCustomer);
     }
 
     @Override

@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "mst_customer")
 public class Customer {
 
@@ -34,4 +34,11 @@ public class Customer {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToOne
+    @JoinColumn(name = "profile_picture_id")
+    private Avatar profilePicture;
+
+    public Customer(String id) {
+        this.id = id;
+    }
 }
